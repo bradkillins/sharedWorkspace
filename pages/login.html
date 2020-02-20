@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title -->
+    <title>Share a Workspace - Log In</title>
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="../styles.css" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="head-title">Share a Workspace</div>
+      <ul class="navLinks">
+        <li><a href="signup.html">Sign Up</a></li>
+        <li><a class="activeLink" href="login.html">Log In</a></li>
+      </ul>
+    </header>
+    <main>
+      <div class="splash"></div>
+      <div class="content">
+        <h1>Login To Your Account</h1>
+        <div class="formContainer">
+          <form id="login">
+            <div class="formLine">
+              <label for="userEmail">Email: </label
+              ><input
+                type="email"
+                id="userEmail"
+                name="userEmail"
+                required
+                maxlength="100"
+              />
+            </div>
+            <div class="formLine">
+              <label for="userPass">Password: </label
+              ><input
+                type="password"
+                id="userPass"
+                name="userPass"
+                required
+                minlength="8"
+                maxlength="50"
+              />
+            </div>
+            <div class="formLine">
+              <button type="submit" class="btn">Submit</button>
+            </div>
+          </form>
+          <div class="formFeedback"></div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="foot-left">
+        <div class="contact"><a href="contact.html">Contact Us</a></div>
+        <div class="legal"><a href="legal.html">Legal</a></div>
+      </div>
+      <div class="foot-right">
+        <ul>
+          <li><a href="https://twitter.com/">Twitter</a></li>
+          <li><a href="https://www.instagram.com/">Instagram</a></li>
+          <li><a href="https://www.facebook.com/">Facebook</a></li>
+        </ul>
+      </div>
+      <script src="../app.js"></script>
+    </footer>
+  </body>
+</html>
