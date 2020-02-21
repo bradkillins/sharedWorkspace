@@ -28,14 +28,37 @@
     <main>
       <div class="splash"></div>
       <div class="content">
-        <h1>Main Menu</h1>
-        <div class="menuContainer">
-          <div class="btnLine">
-            <a href="./ownerAdd.html">Add a Property</a>
-          </div>
-          <div class="btnLine">
-            <a href="./ownerShow.html">My Properties and Workspaces</a>
-          </div>
+        <a href="./ownerWorkspace.html">Back to Workspaces</a>
+        <h1>Add a Workspace for <span id="titleProp"></span></h1>
+        <div class="formContainer">
+          <form id="addWorkspace">
+            <div class="formLine">
+              <label for="type">Type: </label
+              ><input
+                type="text"
+                id="type"
+                name="type"
+                required
+                maxlength="100"
+              />
+            </div>
+            <div class="formLine">
+              <label for="occ">Max Occupancy: </label
+              ><input type="number" id="occ" name="occ" required min="1" />
+            </div>
+            <div class="formLine">
+              <label for="smoke">Smoking: </label
+              ><input type="number" id="smoke" name="smoke" required min="0" />
+            </div>
+            <div class="formLine">
+              <label for="availDate">Available Date: </label
+              ><input type="date" id="availDate" name="availDate" required />
+            </div>
+            <div class="formLine">
+              <button type="submit" class="btn">Submit</button>
+            </div>
+          </form>
+          <div class="formFeedback"></div>
         </div>
       </div>
     </main>

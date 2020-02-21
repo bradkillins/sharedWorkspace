@@ -50,12 +50,6 @@ footer {
   height: 45vh;
 }
 
-/*
-main {
-  background-color: lightgray;
-}
-*/
-
 .content {
   margin: 2em 4em;
 }
@@ -85,4 +79,18 @@ form {
   display: flex;
   justify-content: space-between;
   margin: 0.5em;
+}
+
+table,
+td {
+  border: black solid 1px;
+}
+
+th,
+td {
+  padding: 5px 10px;
+}
+
+.userNameDisplay {
+  margin: auto 1em;
 }

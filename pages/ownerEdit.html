@@ -16,7 +16,7 @@
       rel="stylesheet"
     />
   </head>
-  <body onload="DisplayUserName()">
+  <body onload="DisplayUserName(); PopulateProp();">
     <header>
       <div class="head-title">
         <a href="../index.html">Share a Workspace</a>
@@ -29,9 +29,9 @@
       <div class="splash"></div>
       <div class="content">
         <a href="./ownerMenu.html">Back to Main Menu</a>
-        <h1>Add a Property</h1>
+        <h1>Edit Property Info</h1>
         <div class="formContainer">
-          <form id="addProperty">
+          <form id="editProperty">
             <div class="formLine">
               <label for="address">Address: </label
               ><input
@@ -70,12 +70,7 @@
               /></label>
               <label for="parkingNo"
                 >No
-                <input
-                  type="radio"
-                  class="radio"
-                  id="parkingNo"
-                  name="parking"
-                  checked
+                <input type="radio" class="radio" id="parkingNo" name="parking"
               /></label>
             </div>
             <div class="formLine">
@@ -86,24 +81,13 @@
               /></label>
               <label for="transitNo"
                 >No
-                <input
-                  type="radio"
-                  class="radio"
-                  id="transitNo"
-                  name="transit"
-                  checked
+                <input type="radio" class="radio" id="transitNo" name="transit"
               /></label>
             </div>
             <div class="formLine">
               List this Property:
               <label for="listYes"
-                >Yes
-                <input
-                  type="radio"
-                  class="radio"
-                  id="listYes"
-                  name="list"
-                  checked
+                >Yes <input type="radio" class="radio" id="listYes" name="list"
               /></label>
               <label for="listNo"
                 >No <input type="radio" class="radio" id="listNo" name="list"

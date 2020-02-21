@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title -->
+    <title>Share a Workspace - Welcome</title>
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="../styles.css" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body onload="DisplayUserName(); ShowOwnerProperties();">
+    <header>
+      <div class="head-title">
+        <a href="../index.html">Share a Workspace</a>
+      </div>
+      <div class="userNameDisplay">
+        Hello <span id="displayUserName"></span>
+      </div>
+    </header>
+    <main>
+      <div class="splash"></div>
+      <div class="content">
+        <a href="./ownerMenu.html">Back to Main Menu</a>
+        <h1>My Properties</h1>
+        <div class="propertiesContainer">
+          <table id="propertiesTable">
+            <tbody>
+              <tr>
+                <th>&nbsp;</th>
+                <th>Address</th>
+                <th>Neighborhood</th>
+                <th>Square Feet</th>
+                <th>Parking Garage</th>
+                <th>Transit Access</th>
+                <th>Listed</th>
+                <th>Workspaces</th>
+              </tr>
+            </tbody>
+          </table>
+          <div id="noProperties"></div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="foot-left">
+        <div class="contact"><a href="contact.html">Contact Us</a></div>
+        <div class="legal"><a href="legal.html">Legal</a></div>
+      </div>
+      <div class="foot-right">
+        <ul>
+          <li><a href="https://twitter.com/">Twitter</a></li>
+          <li><a href="https://www.instagram.com/">Instagram</a></li>
+          <li><a href="https://www.facebook.com/">Facebook</a></li>
+        </ul>
+      </div>
+    </footer>
+    <script src="../app.js"></script>
+  </body>
+</html>
