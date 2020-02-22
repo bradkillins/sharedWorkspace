@@ -168,6 +168,61 @@ const CreateNewProperty = () => {
   }, 5000);
 };
 
+const CreateNewWorkspace = () => {
+  //get elements from form
+  const type = document.querySelector("#type");
+  const occ = document.querySelector("#occ").value;
+  const smokeYes = document.querySelector("#smokeYes").checked;
+  const availDate = document.querySelector("#availDate").value;
+  const term = document.querySelector("#term");
+  const price = document.querySelector("#price").value;
+  const listYes = document.querySelector("#listYes").checked;
+  //get selected items from select elements
+  const selType = type.options[type.selectedIndex].value;
+  const selTerm = term.options[term.selectedIndex].value;
+
+  let list = true;
+  let smoke = false;
+  if (smokeYes) {
+    smoke = true;
+  }
+  if (!listYes) {
+    list = false;
+  }
+
+  let newWorkspace = new Workspace(
+    selType,
+    occ,
+    smoke,
+    availDate,
+    selTerm,
+    price,
+    list
+  );
+  newWorkspace.id = GenRanId(16); //generate a random id to track later
+
+  //save Workspace to currentProp
+  let currentProp = JSON.parse(sessionStorage.getItem("currentProp"));
+  currentProp.workspace.push(newWorkspace);
+  //save updated currentProp in sessionStorage
+  sessionStorage.setItem("currentProp", JSON.stringify(currentProp));
+  //save updated currentProp to properties in localStorage
+  let properties = JSON.parse(localStorage.getItem("properties"));
+  let index = properties.findIndex(e => e.id === currentProp.id);
+  properties[index] = currentProp;
+  localStorage.setItem("properties", JSON.stringify(properties));
+  //provide user feedback
+  document.querySelector(
+    ".formFeedback"
+  ).innerHTML = `Successfully added Workspace to ${currentProp.address}`;
+  document.querySelector("#addWorkspace").reset();
+  setTimeout(() => {
+    document.querySelector(".formFeedback").innerHTML = "";
+  }, 5000);
+
+  //console.log(newWorkspace);
+};
+
 //Login function
 const Login = () => {
   const userEmail = document.querySelector("#userEmail").value;
@@ -217,15 +272,29 @@ const ShowOwnerProperties = () => {
 
   const propertiesTable = document.querySelector("#propertiesTable");
   ownerProperties.forEach(e => {
+    let parking = "No";
+    if (e.parking) {
+      parking = "Yes";
+    }
+    let transit = "No";
+    if (e.transit) {
+      transit = "Yes";
+    }
+    let listed = "No";
+    if (e.listed) {
+      listed = "Yes";
+    }
+
     let result = `<tbody><tr>
       <td><button name="${e.id}" onclick="EditSelectedProp(this.name, './ownerEdit.html');">Edit</button></td>
       <td>${e.address}</td>
       <td>${e.neighbor}</td>
       <td>${e.sqFeet}</td>
-      <td>${e.parking}</td>
-      <td>${e.transit}</td>
-      <td>${e.listed}</td>
-      <td><button name="${e.id}" onclick="EditSelectedProp(this.name, './ownerWorkspace.html');">View/Add/Modify</button></td>
+      <td>${parking}</td>
+      <td>${transit}</td>
+      <td>${listed}</td>
+      <td>${e.workspace.length} Workspaces 
+      <button name="${e.id}" onclick="EditSelectedProp(this.name, './ownerWorkspace.html');">View/Add/Modify</button></td>
       </tr></tbody>`;
     propertiesTable.insertAdjacentHTML("beforeend", result);
   });
@@ -277,14 +346,16 @@ const PopulateProp = () => {
 };
 
 const EditCurrentProp = () => {
+  //get dom elements of edit form
   const address = document.querySelector("#address").value;
   const neighbor = document.querySelector("#neighborhood").value;
   const sqFeet = document.querySelector("#sqFeet").value;
   const parkingYes = document.querySelector("#parkingYes").checked;
   const transitYes = document.querySelector("#transitYes").checked;
   const listYes = document.querySelector("#listYes").checked;
-
+  //retrieve the currentProp from sessionStorage
   let currentProp = JSON.parse(sessionStorage.getItem("currentProp"));
+  //update the currentProp with changes
   currentProp.address = address;
   currentProp.neighbor = neighbor;
   currentProp.sqFeet = sqFeet;
@@ -304,14 +375,31 @@ const EditCurrentProp = () => {
     currentProp.listed = false;
   }
 
-  //console.log(currentProp);
   //retrieve properties from localStorage, then update with edited currentProp
   let properties = JSON.parse(localStorage.getItem("properties"));
+  //find the currentProp in properties using its id
   let index = properties.findIndex(e => e.id === currentProp.id);
   properties[index] = currentProp;
   localStorage.setItem("properties", JSON.stringify(properties));
   //send user back to view properties page
   document.location = "./ownerShow.html";
+};
+
+const DeleteCurrentProp = () => {
+  //retrieve currentProp and properties
+  const currentProp = JSON.parse(sessionStorage.getItem("currentProp"));
+  let properties = JSON.parse(localStorage.getItem("properties"));
+  //get index of currentProp in properties
+  const index = properties.findIndex(e => e.id == currentProp.id);
+  //remove currentProp from properties
+  properties.splice(index, 1);
+  //save updated properties to localStorage
+  localStorage.setItem("properties", JSON.stringify(properties));
+  //clear currentProp from sessionStorage
+  sessionStorage.setItem("currentProp", JSON.stringify([]));
+
+  //send user back to My Properties menu
+  document.location = "./ownerMenu.html";
 };
 
 const ShowWorkspaces = () => {
@@ -328,7 +416,7 @@ const ShowWorkspaces = () => {
   const workspacesTable = document.querySelector("#workspacesTable");
   currentProp.workspace.forEach(e => {
     let result = `<tbody><tr>
-      <td><button name="${e.id}">Edit</button></td>
+      <td><button name="${e.id}" id="${currentProp.id}" onclick="EditSelectedWorkspace(this.id, this.name);">Edit</button></td>
       <td>${e.type}</td>
       <td>${e.occ}</td>
       <td>${e.smoke}</td>
@@ -339,6 +427,123 @@ const ShowWorkspaces = () => {
       </tr></tbody>`;
     workspacesTable.insertAdjacentHTML("beforeend", result);
   });
+};
+
+const EditSelectedWorkspace = (propId, workId) => {
+  //retrieve properties from localStorage
+  const properties = JSON.parse(localStorage.getItem("properties"));
+  //find index of currentProp
+  const propIndex = properties.findIndex(prop => prop.id === propId);
+  //find index of selected Workspace
+  const workIndex = properties[propIndex].workspace.findIndex(
+    work => work.id === workId
+  );
+  //save selected workspace as currentWork, then add propId
+  let currentWork = properties[propIndex].workspace[workIndex];
+  currentWork.myPropId = propId;
+  //save currentWork into sessionStorage
+  sessionStorage.setItem("currentWork", JSON.stringify(currentWork));
+  //load edit page
+  document.location = "./ownerWorkspaceEdit.html";
+};
+
+//populates the edit workspace form with data from currentWork
+const PopulateCurrentWork = () => {
+  //get dom elements from form
+  const type = document.querySelector("#type");
+  const occ = document.querySelector("#occ");
+  const smokeYes = document.querySelector("#smokeYes");
+  const smokeNo = document.querySelector("#smokeNo");
+  const availDate = document.querySelector("#availDate");
+  const term = document.querySelector("#term");
+  const price = document.querySelector("#price");
+  const listYes = document.querySelector("#listYes");
+  const listNo = document.querySelector("#listNo");
+
+  //load currentWork from sessionStorage
+  let currentWork = JSON.parse(sessionStorage.getItem("currentWork"));
+
+  //fill in form with values from currentWork
+  if (currentWork.type === "meet") type.options[0].selected = true;
+  if (currentWork.type === "office") type.options[1].selected = true;
+  if (currentWork.type === "desk") type.options[2].selected = true;
+  occ.value = currentWork.occ;
+  if (currentWork.smoke) {
+    smokeYes.checked = true;
+  } else {
+    smokeNo.checked = true;
+  }
+  availDate.value = currentWork.availDate;
+  if (currentWork.term === "day") term.options[0].selected = true;
+  if (currentWork.term === "week") term.options[1].selected = true;
+  if (currentWork.term === "month") term.options[2].selected = true;
+  price.value = currentWork.price;
+  if (currentWork.listed) {
+    listYes.checked = true;
+  } else {
+    listNo.checked = true;
+  }
+};
+
+const EditCurrentWork = () => {
+  //get elements from form
+  const type = document.querySelector("#type");
+  const occ = document.querySelector("#occ").value;
+  const smokeYes = document.querySelector("#smokeYes").checked;
+  const availDate = document.querySelector("#availDate").value;
+  const term = document.querySelector("#term");
+  const price = document.querySelector("#price").value;
+  const listYes = document.querySelector("#listYes").checked;
+  //get selected items from select elements
+  const selType = type.options[type.selectedIndex].value;
+  const selTerm = term.options[term.selectedIndex].value;
+
+  //retrieve currentWork from sessionStorage
+  let currentWork = JSON.parse(sessionStorage.getItem("currentWork"));
+  //update currentWork
+  currentWork.type = selType;
+  currentWork.occ = occ;
+  if (smokeYes) currentWork.smoke = true;
+  else currentWork.smoke = false;
+  currentWork.availDate = availDate;
+  currentWork.term = selTerm;
+  currentWork.price = price;
+  if (listYes) currentWork.listed = true;
+  else currentWork.listed = false;
+
+  //retrieve property that contains current workspace from localStorage
+  let properties = JSON.parse(localStorage.getItem("properties"));
+
+  //find index of currentProp
+  const propIndex = properties.findIndex(
+    prop => prop.id === currentWork.myPropId
+  );
+  //find index of selected Workspace
+  const workIndex = properties[propIndex].workspace.findIndex(
+    work => work.id === currentWork.id
+  );
+
+  //save updated workspace to properties in localStorage and update currentProp in sessionStorage
+  properties[propIndex].workspace[workIndex] = currentWork;
+  localStorage.setItem("properties", JSON.stringify(properties));
+  sessionStorage.setItem("currentProp", JSON.stringify(properties[propIndex]));
+
+  //send user back to workspaces page
+  document.location = "./ownerWorkspace.html";
+};
+
+const DeleteCurrentWork = () => {
+  //get currentWork from sessionStorage and properties from localStorage
+  let currentWork = JSON.parse(sessionStorage.getItem("currentWork"));
+  let properties = JSON.parse(localStorage.getItem("properties"));
+  let propIndex = properties.findIndex(
+    prop => prop.id === currentWork.myPropId
+  );
+  let workIndex = properties[propIndex].workspace.findIndex(
+    work => work.id === currentWork.id
+  );
+
+  properties[propIndex].workspace.splice(workIndex, 1);
 };
 
 const FormListener = (selector, func) => {
@@ -361,6 +566,12 @@ const DisplayUserName = () => {
   displayName.innerText = name;
 };
 
+const DisplayPropName = () => {
+  const displayTitle = document.querySelector("#titleProp");
+  const title = JSON.parse(sessionStorage.getItem("currentProp")).address;
+  displayTitle.innerText = title;
+};
+
 //a pseudo random character generator
 const GenRanId = length => {
   const charSet =
@@ -378,3 +589,5 @@ FormListener("#signup", CreateNewUser);
 FormListener("#login", Login);
 FormListener("#addProperty", CreateNewProperty);
 FormListener("#editProperty", EditCurrentProp);
+FormListener("#addWorkspace", CreateNewWorkspace);
+FormListener("#editWorkspace", EditCurrentWork);

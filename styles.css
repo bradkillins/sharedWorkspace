@@ -4,7 +4,7 @@
 }
 
 body {
-  background-color: lightgray;
+  background-color: #b5ffdf;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -13,7 +13,12 @@ footer {
   display: flex;
   justify-content: space-around;
   height: 10vh;
-  background-color: darkgreen;
+  background-color: #57b38b;
+}
+
+h1 {
+  color: #66281e;
+  margin: 0.5em 0;
 }
 
 .head-title {
@@ -21,7 +26,7 @@ footer {
   width: 70%;
   margin: auto;
   text-align: center;
-  font-size: 2em;
+  font-size: 2.5em;
 }
 
 .navLinks {
@@ -32,8 +37,13 @@ footer {
   margin: auto 0;
 }
 
+a {
+  color: #66281e;
+  /* text-decoration: none; */
+}
+
 .navLinks a {
-  color: black;
+  color: #66281e;
   text-decoration: none;
   padding: 4px;
 }
@@ -68,7 +78,13 @@ footer {
 
 .btn {
   padding: 3px;
-  background-color: cornflowerblue;
+  background-color: #36b5e3;
+}
+
+.btnRed {
+  padding: 3px;
+  background-color: #b33c29;
+  color: white;
 }
 
 form {

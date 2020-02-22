@@ -16,7 +16,7 @@
       rel="stylesheet"
     />
   </head>
-  <body onload="DisplayUserName()">
+  <body onload="DisplayUserName(); DisplayPropName();">
     <header>
       <div class="head-title">
         <a href="../index.html">Share a Workspace</a>
@@ -34,25 +34,69 @@
           <form id="addWorkspace">
             <div class="formLine">
               <label for="type">Type: </label
-              ><input
-                type="text"
-                id="type"
-                name="type"
-                required
-                maxlength="100"
-              />
+              ><select name="type" id="type">
+                <option value="meet">Meeting Room</option>
+                <option selected value="office">Private Office</option>
+                <option value="desk">Desk in Open Area</option>
+              </select>
             </div>
             <div class="formLine">
               <label for="occ">Max Occupancy: </label
               ><input type="number" id="occ" name="occ" required min="1" />
             </div>
             <div class="formLine">
-              <label for="smoke">Smoking: </label
-              ><input type="number" id="smoke" name="smoke" required min="0" />
+              Smoking:
+              <label for="smokeYes"
+                >Yes
+                <input type="radio" class="radio" id="smokeYes" name="smoke"
+              /></label>
+              <label for="smokeNo"
+                >No
+                <input
+                  type="radio"
+                  class="radio"
+                  id="smokeNo"
+                  name="smoke"
+                  checked
+              /></label>
             </div>
             <div class="formLine">
               <label for="availDate">Available Date: </label
               ><input type="date" id="availDate" name="availDate" required />
+            </div>
+            <div class="formLine">
+              <label for="term">Lease Term: </label
+              ><select name="term" id="term">
+                <option value="day">1 Day</option>
+                <option selected value="week">1 Week</option>
+                <option value="month">1 Month</option>
+              </select>
+            </div>
+            <div class="formLine">
+              <label for="price">Price: </label
+              ><input
+                type="number"
+                id="price"
+                name="price"
+                required
+                min="0"
+                step="0.01"
+              />
+            </div>
+            <div class="formLine">
+              List this Workspace:
+              <label for="listYes"
+                >Yes
+                <input
+                  type="radio"
+                  class="radio"
+                  id="listYes"
+                  name="list"
+                  checked
+              /></label>
+              <label for="listNo"
+                >No <input type="radio" class="radio" id="listNo" name="list"
+              /></label>
             </div>
             <div class="formLine">
               <button type="submit" class="btn">Submit</button>
