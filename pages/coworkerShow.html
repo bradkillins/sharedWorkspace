@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title -->
+    <title>Share a Workspace - View Available Workspaces</title>
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="../styles.css" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body onload="DisplayUserName(); firstLoadWorkTable()">
+    <header>
+      <div class="head-title">Share a Workspace</div>
+      <div class="userNameDisplay">
+        <div>Hello <span id="displayUserName"></span></div>
+        <div><a href="../index.html">Log Out</a></div>
+      </div>
+    </header>
+    <main>
+      <div class="splash"></div>
+      <div class="content">
+        <a href="./coworkerMenu.html">Back to Main Menu</a>
+        <h1>Available Workspaces</h1>
+        <form id="filterForm">
+          <div>
+            <label for="filterBy">Filter By: </label>
+            <select
+              name="filterBy"
+              id="filterBy"
+              onchange="InsertFilterInput();"
+            >
+              <option value="none" selected>none...</option>
+              <option value="address">Address</option>
+              <option value="neighbor">Neighborhood</option>
+              <option value="type">Type</option>
+              <option value="occ">Occupancy</option>
+              <option value="sqFeet">Sq Feet</option>
+              <option value="term">Term</option>
+              <option value="availDate">Available Date</option>
+              <option value="parking">Parking Garage</option>
+              <option value="smoke">Smoking</option>
+              <option value="transit">Transit</option>
+            </select>
+          </div>
+          <div class="formLine">
+            <div id="filterTerm">
+              <label for="filterTerm">Filter Term: </label>
+              <input type="text" id="filterTerm" disabled />
+            </div>
+          </div>
+          <div class="formLine">
+            <button type="submit">Apply Filter</button>
+          </div>
+        </form>
+        <div class="tableContainer">
+          <table id="availWorkTable"></table>
+          <div id="noWorkspaces"></div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="foot-left">
+        <div class="contact"><a href="contact.html">Contact Us</a></div>
+        <div class="legal"><a href="legal.html">Legal</a></div>
+      </div>
+      <div class="foot-right">
+        <ul>
+          <li><a href="https://twitter.com/">Twitter</a></li>
+          <li><a href="https://www.instagram.com/">Instagram</a></li>
+          <li><a href="https://www.facebook.com/">Facebook</a></li>
+        </ul>
+      </div>
+    </footer>
+    <script src="../app.js"></script>
+  </body>
+</html>

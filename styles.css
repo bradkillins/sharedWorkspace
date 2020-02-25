@@ -87,6 +87,14 @@ a {
   color: white;
 }
 
+button {
+  margin: 1px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
 form {
   width: 35%;
 }
@@ -98,13 +106,15 @@ form {
 }
 
 table,
+th,
 td {
   border: black solid 1px;
+  border-collapse: collapse;
 }
 
 th,
 td {
-  padding: 5px 10px;
+  padding: 5px 8px;
 }
 
 .userNameDisplay {

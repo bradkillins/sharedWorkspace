@@ -18,11 +18,10 @@
   </head>
   <body onload="DisplayUserName(); DisplayPropName();">
     <header>
-      <div class="head-title">
-        <a href="../index.html">Share a Workspace</a>
-      </div>
+      <div class="head-title">Share a Workspace</div>
       <div class="userNameDisplay">
-        Hello <span id="displayUserName"></span>
+        <div>Hello <span id="displayUserName"></span></div>
+        <div><a href="../index.html">Log Out</a></div>
       </div>
     </header>
     <main>
@@ -37,7 +36,7 @@
               ><select name="type" id="type">
                 <option value="meet">Meeting Room</option>
                 <option selected value="office">Private Office</option>
-                <option value="desk">Desk in Open Area</option>
+                <option value="desk">Open Area Desk</option>
               </select>
             </div>
             <div class="formLine">
