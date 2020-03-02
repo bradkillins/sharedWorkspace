@@ -16,7 +16,15 @@
       rel="stylesheet"
     />
   </head>
-  <body onload="DisplayUserName(); firstLoadWorkTable()">
+  <body onload="DisplayUserName(); FirstLoadWorkTable()">
+    <div class="popUp popUpHide" id="popUp">
+      <div class="popClose" onclick="ClosePopup();"><div>X</div></div>
+      <div id="popMsg">
+        Owner Name: Bob Smith <br />
+        Phone: 403-234-1234<br />
+        Email: bob@smith.com
+      </div>
+    </div>
     <header>
       <div class="head-title">Share a Workspace</div>
       <div class="userNameDisplay">
@@ -51,7 +59,7 @@
             </select>
           </div>
           <div class="formLine">
-            <div id="filterTerm">
+            <div id="filterTermInput">
               <label for="filterTerm">Filter Term: </label>
               <input type="text" id="filterTerm" disabled />
             </div>

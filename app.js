@@ -39,6 +39,9 @@ function Workspace(type, occ, smoke, availDate, term, price, listed) {
   this.listed = listed;
 }
 
+/* SaveUser - saves a user object to the users array in localStorage
+ *    @Params - user: the object to store in the users array
+ */
 const SaveUser = user => {
   //check if users array exists in localStorage
   if (!localStorage.getItem("users")) {
@@ -57,6 +60,9 @@ const SaveUser = user => {
   }
 };
 
+/* SaveProperty - saves a property object to the properties array in localStorage
+ *    @Params - property: the object to store in the properties array
+ */
 const SaveProperty = property => {
   //check properties array exists in localStorage
   if (!localStorage.getItem("properties")) {
@@ -77,7 +83,9 @@ const SaveProperty = property => {
   }
 };
 
-//checks to see if a given email exists in the users array
+/* CheckUserExist - checks to see if a given email exists in the users array
+ *    @Params - userEmail - the email to check for in the users array
+ */
 const CheckUserExist = userEmail => {
   if (!localStorage.getItem("users")) {
     return false;
@@ -91,7 +99,9 @@ const CheckUserExist = userEmail => {
   }
 };
 
-//Create new user
+/* CreateNewUser - instantiates a new user with values from the login form
+ *                 then saves the new user if they don't already exist in array
+ */
 const CreateNewUser = () => {
   const fName = document.querySelector("#fName").value;
   const lName = document.querySelector("#lName").value;
@@ -123,8 +133,10 @@ const CreateNewUser = () => {
   }, 5000);
 };
 
-//Create new Property
-
+/* CreateNewProperty - instantiates a new property object and saves it to the
+ *                     properties array in local storage, and to currentProperty
+ *                     in sessionStorage.
+ */
 const CreateNewProperty = () => {
   const address = document.querySelector("#address").value;
   const neighbor = document.querySelector("#neighborhood").value;
@@ -165,6 +177,10 @@ const CreateNewProperty = () => {
   }, 5000);
 };
 
+/* CreateNewWorkspace - instantiates a new workspace object and saves it to the
+ *                      workspaces array in localstorage and sets it to
+ *                      currentWorkspace in sessionStorage
+ */
 const CreateNewWorkspace = () => {
   //get elements from form
   const type = document.querySelector("#type");
@@ -220,6 +236,9 @@ const CreateNewWorkspace = () => {
   //console.log(newWorkspace);
 };
 
+/* Login - Checks to see if the given email and password match a stored user
+ *         if they do, set user to currentUser in sessionStorage then load menu
+ */
 //Login function
 const Login = () => {
   const userEmail = document.querySelector("#userEmail").value;
@@ -228,9 +247,7 @@ const Login = () => {
   if (CheckUserExist(userEmail)) {
     let users = JSON.parse(localStorage.getItem("users"));
     let index = users.findIndex(user => user.email === userEmail);
-    console.log("User found at index " + index);
     if (users[index].pass === userPass) {
-      console.log("Password OK! :)");
       sessionStorage.clear();
       let currentUser = users[index];
       currentUser.originalIndex = index; //add property originalIndex to track the index of user in users
@@ -250,6 +267,9 @@ const Login = () => {
   }
 };
 
+/* ShowOwnerProperties - gets the properties with currentUser email then
+ *              fill in the #propertiesTable
+ */
 const ShowOwnerProperties = () => {
   const currentOwner = JSON.parse(sessionStorage.getItem("currentUser"));
   const allProperties = JSON.parse(localStorage.getItem("properties"));
@@ -297,7 +317,10 @@ const ShowOwnerProperties = () => {
   });
 };
 
-//allows an owner to edit a selected property
+/* EditSelectedProp - sets the currentProp
+ *    @Params - id: the id of the property to set as current
+ *              location: the edit page to load
+ */
 const EditSelectedProp = (id, location) => {
   //saves selected prop to sessionStorage
   const properties = JSON.parse(localStorage.getItem("properties"));
@@ -308,7 +331,9 @@ const EditSelectedProp = (id, location) => {
   document.location = location;
 };
 
-//populates the edit form with the current Property details
+/* PopulateProp - populates the edit form with the current
+ *                Property details
+ */
 const PopulateProp = () => {
   //get form elements
   const address = document.querySelector("#address");
@@ -342,6 +367,9 @@ const PopulateProp = () => {
   }
 };
 
+/* EditCurrentProp - Takes form input and saves them to the current
+ *              property, then updates the saved property in localStorage
+ */
 const EditCurrentProp = () => {
   //get dom elements of edit form
   const address = document.querySelector("#address").value;
@@ -382,6 +410,9 @@ const EditCurrentProp = () => {
   document.location = "./ownerShow.html";
 };
 
+/* DeleteCurrentProp - Removes the current property from localStorage
+ *                    and clears the currentProp from sessionStorage
+ */
 const DeleteCurrentProp = () => {
   //retrieve currentProp and properties
   const currentProp = JSON.parse(sessionStorage.getItem("currentProp"));
@@ -399,6 +430,9 @@ const DeleteCurrentProp = () => {
   document.location = "./ownerMenu.html";
 };
 
+/* ShowWorkspaces - Builds a table that shows all workspaces in the currentProp
+ *                  Displays an appropriate message if no workspaces found.
+ */
 const ShowWorkspaces = () => {
   const currentProp = JSON.parse(sessionStorage.getItem("currentProp"));
 
@@ -426,20 +460,32 @@ const ShowWorkspaces = () => {
 
     let listed = e.listed ? "Yes" : "No";
 
-    let result = `<tbody><tr>
-      <td><button name="${e.id}" id="${currentProp.id}" onclick="EditSelectedWorkspace(this.id, this.name);">Edit</button></td>
-      <td>${type}</td>
-      <td>${e.occ}</td>
-      <td>${smoke}</td>
-      <td>${e.availDate}</td>
-      <td>${term}</td>
-      <td>${e.price}</td>
-      <td>${listed}</td>
+    let result = `<tbody>
+      <tr>
+        <td>
+          <button 
+            name="${e.id}" 
+            id="${currentProp.id}" 
+            onclick="EditSelectedWorkspace(this.id, this.name);"
+            >Edit
+          </button>
+        </td>
+        <td>${type}</td>
+        <td>${e.occ}</td>
+        <td>${smoke}</td>
+        <td>${e.availDate}</td>
+        <td>${term}</td>
+        <td>${e.price}</td>
+        <td>${listed}</td>
       </tr></tbody>`;
     workspacesTable.insertAdjacentHTML("beforeend", result);
   });
 };
 
+/* EditSelectedWorkspace - Saves the selected workspace as the currentWorkspace
+ *    @Params - propId: the currentProp Id
+                workID: tje id of the selected workspace
+ */
 const EditSelectedWorkspace = (propId, workId) => {
   //retrieve properties from localStorage
   const properties = JSON.parse(localStorage.getItem("properties"));
@@ -458,7 +504,8 @@ const EditSelectedWorkspace = (propId, workId) => {
   document.location = "./ownerWorkspaceEdit.html";
 };
 
-//populates the edit workspace form with data from currentWork
+/* PopulateCurrentWork - populates the edit workspace form with data from currentWork
+ */
 const PopulateCurrentWork = () => {
   //get dom elements from form
   const type = document.querySelector("#type");
@@ -496,6 +543,9 @@ const PopulateCurrentWork = () => {
   }
 };
 
+/* EditCurrentWork - Gets form input and updates the currentWorkplace
+ *                   with new input
+ */
 const EditCurrentWork = () => {
   //get elements from form
   const type = document.querySelector("#type");
@@ -543,6 +593,9 @@ const EditCurrentWork = () => {
   document.location = "./ownerWorkspace.html";
 };
 
+/* DeleteCurrentWork - Removes the currentWorkspace from it's property's workspace array
+ *                     in localStorage and clears the currentWorkspace form sessionStorage
+ */
 const DeleteCurrentWork = () => {
   //get currentWork from sessionStorage and properties from localStorage
   let currentWork = JSON.parse(sessionStorage.getItem("currentWork"));
@@ -576,6 +629,9 @@ const DisplayPropName = () => {
   displayTitle.innerText = title;
 };
 
+/* GenRanId - a pseudo random alpha-numeric character generator
+ *    @Params - length: how many random characters to generate
+ */
 //a pseudo random character generator
 const GenRanId = length => {
   const charSet =
@@ -587,8 +643,9 @@ const GenRanId = length => {
   return id;
 };
 
-//SaveAvailWorkspaces - Builds an array of all available workspaces
-// and saves it as "availWorkspaces" in sessionStorage.
+/* SaveAvailWorkspaces - Builds an array of all available workspaces
+ *               and saves it as "availWorkspaces" in sessionStorage
+ */
 const SaveAvailWorkspaces = () => {
   //retrieve properties
   const properties = JSON.parse(localStorage.getItem("properties"));
@@ -608,16 +665,16 @@ const SaveAvailWorkspaces = () => {
     });
   });
   sessionStorage.setItem("availWorkspaces", JSON.stringify(availWork));
+  sessionStorage.setItem("displayWorkspaces", JSON.stringify(availWork));
 };
 
-//sessionStorage: availWorkspaces  -- the master array of available workspaces - DO NOT MODIFY
-//                displayWorkspaces -- current
-
+/* PopulateWorkTables - shows all workspaces within the dataset in a table
+ *    @Params - dataset: the array of workspaces to display in table
+ */
 const PopulateWorkTable = dataset => {
   //load the dataset from sessionStorage
   const workspaces = JSON.parse(sessionStorage.getItem(dataset));
   if (!workspaces.length) {
-    console.log(document.querySelector("#noWorkspaces"));
     document.querySelector(
       "#noWorkspaces"
     ).innerHTML = `Sorry there are no available workspaces. Try changing the filter settings. 
@@ -630,38 +687,50 @@ const PopulateWorkTable = dataset => {
     `<tbody>
         <tr>
             <th>
-                Address <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Address<button onclick="Sort('address', 'asc');">&uarr;</button
+                ><button onclick="Sort('address', 'des');">&darr;</button>
             </th>
             <th>
-                Neighborhood <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Neighborhood<button onclick="Sort('neighbor', 'asc');">&uarr;</button
+                ><button onclick="Sort('neighbor', 'des');">&darr;</button>
             </th>
             <th>
-                Type <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Type<button onclick="Sort('type', 'asc');">&uarr;</button
+                ><button onclick="Sort('type', 'des');">&darr;</button>
             </th>
             <th>
-                Occupancy <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Occupancy<button onclick="Sort('occ', 'asc');">&uarr;</button
+                ><button onclick="Sort('occ', 'des');">&darr;</button>
             </th>
             <th>
-                Sq Feet <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                SqFeet<button onclick="Sort('sqFeet', 'asc');">&uarr;</button
+                ><button onclick="Sort('sqFeet', 'des');">&darr;</button>
             </th>
             <th>
-                Term <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Term<button onclick="Sort('term', 'asc');">&uarr;</button
+                ><button onclick="Sort('term', 'des');">&darr;</button>
             </th>
             <th>
-                Price <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Price<button onclick="Sort('price', 'asc');">&uarr;</button
+                ><button onclick="Sort('price', 'des');">&darr;</button>
             </th>
             <th>
-                Available Date <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Available Date<button onclick="Sort('availDate', 'asc');">&uarr;</button
+                ><button onclick="Sort('availDate', 'des');">&darr;</button>
             </th>
             <th>
-                Parking Garage <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Parking Garage<button onclick="Sort('parking', 'asc');">&uarr;</button
+                ><button onclick="Sort('parking', 'des');">&darr;</button>
             </th>
             <th>
-                Smoking <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Smoking<button onclick="Sort('smoke', 'asc');">&uarr;</button
+                ><button onclick="Sort('smoke', 'des');">&darr;</button>
             </th>
             <th>
-                Transit <button onclick="">&uarr;</button><button onclick="">&darr;</button>
+                Transit<button onclick="Sort('transit', 'asc');">&uarr;</button
+                ><button onclick="Sort('transit', 'des');">&darr;</button>
             </th>
+            <th>Contact</th>
         </tr>
     </tbody>`;
 
@@ -677,14 +746,15 @@ const PopulateWorkTable = dataset => {
     const parking = workspace.parking;
     const smoke = workspace.smoke;
     const transit = workspace.transit;
+    const owner = workspace.owner;
 
     if (type === "meet") type = "Meeting Room";
     if (type === "office") type = "Private Office";
-    if (type === "desk") type = "Open Area Desk";
+    if (type === "desk") type = "Desk in Open Area";
 
-    if (term === "day") term = "1 Day";
-    if (term === "week") term = "1 Week";
-    if (term === "month") term = "1 Month";
+    if (term === "day") term = "Day";
+    if (term === "week") term = "Week";
+    if (term === "month") term = "Month";
 
     body += `<tbody>
                 <tr>
@@ -694,26 +764,33 @@ const PopulateWorkTable = dataset => {
                     <td>${occ}</td>
                     <td>${sqFeet}</td>
                     <td>${term}</td>
-                    <td>${price}</td>
+                    <td>$${price}</td>
                     <td>${availDate}</td>
                     <td>${parking ? "Yes" : "No"}</td>
                     <td>${smoke ? "Yes" : "No"}</td>
                     <td>${transit ? "Yes" : "No"}</td>
+                    <td><button id="${owner}" onclick="ShowOwnerInfo(this.id);">View</button></td>
                 </tr>
             </tbody>`;
   });
   table.innerHTML = body;
 };
 
-const firstLoadWorkTable = () => {
+/* FirstLoadWorkTable - run on load of coworkerShow, sets availWorkspaces
+ *                      then populates the table
+ */
+const FirstLoadWorkTable = () => {
   //
   SaveAvailWorkspaces();
   PopulateWorkTable("availWorkspaces");
 };
 
+/* InsertFilterInput - Dynamically changes the filterTerm input depending
+ *                     on the filterBy selection
+ */
 const InsertFilterInput = () => {
   const filSelect = document.querySelector("#filterBy");
-  const insertPoint = document.querySelector("#filterTerm");
+  const insertPoint = document.querySelector("#filterTermInput");
   let insertInput;
   if (filSelect.options[filSelect.selectedIndex].value === "none") {
     insertInput = `<label for="filterTerm">Filter Term: </label>
@@ -787,7 +864,11 @@ const InsertFilterInput = () => {
   insertPoint.innerHTML = insertInput;
 };
 
+/* FilterReady - Gets the selected filerBy and filerTerm, then
+ *      feeds that to the Filter function
+ */
 const FilterReady = () => {
+  document.querySelector("#noWorkspaces").innerHTML = "";
   //get filterBy and filterTerm from DOM
   const filSelect = document.querySelector("#filterBy");
   const filterBy = filSelect.options[filSelect.selectedIndex].value;
@@ -805,50 +886,47 @@ const FilterReady = () => {
   }
   //select list filterBy options
   if (filterBy === "type" || filterBy === "term") {
-    //     const
+    let filSelect = document.querySelector("#filterTerm");
+    filterInput = filSelect.options[filSelect.selectedIndex].value;
+  }
+
+  if (
+    filterBy === "parking" ||
+    filterBy === "smoke" ||
+    filterBy === "transit"
+  ) {
+    document.querySelector("#filterTermYes").checked
+      ? (filterInput = true)
+      : (filterInput = false);
   }
 
   //run the filter
   Filter(filterBy, filterInput);
 };
 
+/* Filter - Filters the workspace table by a column and term then updates the table
+ *    @Params - filterBy: the column to filter
+ *              filterInput: the term/input to filter for
+ */
 const Filter = (filterBy, filterInput) => {
   //retrieve availWorkspaces from sessionStorage
   const originalData = JSON.parse(sessionStorage.getItem("availWorkspaces"));
-
+  console.log("filterBy = " + filterBy);
+  console.log("filterInput = " + filterInput);
   let filteredData;
-  if (filterBy === "address") {
-    filteredData = originalData.filter(e => e.address.includes(filterInput));
-  }
-  if (filterBy === "neighbor") {
-    filteredData = originalData.filter(e => e.neighbor.includes(filterInput));
-  }
-  if (filterBy === "type") {
-    filteredData = originalData.filter(e => e.type.includes(filterInput));
-  }
-  if (filterBy === "occ") {
-    filteredData = originalData.filter(e => e.occ.includes(filterInput));
-  }
-  if (filterBy === "sqFeet") {
-    filteredData = originalData.filter(e => e.sqFeet.includes(filterInput));
-  }
-  if (filterBy === "term") {
-    filteredData = originalData.filter(e => e.term.includes(filterInput));
-  }
-  if (filterBy === "availDate") {
-    filteredData = originalData.filter(e => e.availDate.includes(filterInput));
-  }
-  if (filterBy === "parking") {
-    filteredData = originalData.filter(e => e.parking.includes(filterInput));
-  }
-  if (filterBy === "smoke") {
-    filteredData = originalData.filter(e => e.smoke.includes(filterInput));
-  }
-  if (filterBy === "transit") {
-    filteredData = originalData.filter(e => e.transit.includes(filterInput));
-  }
+
   if (filterBy === "none") {
     filteredData = originalData;
+  } else if (
+    filterBy === "parking" ||
+    filterBy === "smoke" ||
+    filterBy === "transit"
+  ) {
+    filteredData = originalData.filter(e => e[filterBy] === filterInput);
+  } else {
+    filteredData = originalData.filter(e =>
+      e[filterBy].toLowerCase().includes(filterInput.toLowerCase())
+    );
   }
 
   //store filtered data in displayWorkspaces
@@ -857,21 +935,112 @@ const Filter = (filterBy, filterInput) => {
   PopulateWorkTable("displayWorkspaces");
 };
 
-//Sort(dataset)
+/* Sort - Sorts the workspaces being displayed in the table by a column
+ *    @Params - sortBy: the column to sort by
+ *            - order: either ascending or descending
+ */
+const Sort = (sortBy, order) => {
+  let currentDisplay = JSON.parse(sessionStorage.getItem("displayWorkspaces"));
 
-//adds an event listener listening for submit, then blocks the page from refreshing
-// and runs a function.
+  if (order === "asc") {
+    if (
+      sortBy === "address" ||
+      sortBy === "neighbor" ||
+      sortBy === "type" ||
+      sortBy === "availDate"
+    ) {
+      currentDisplay.sort((a, b) => {
+        if (a[sortBy] > b[sortBy]) return 1;
+        else if (a[sortBy] < b[sortBy]) return -1;
+        else return 0;
+      });
+    }
+
+    if (sortBy === "parking" || sortBy === "smoke" || sortBy === "transit") {
+      currentDisplay.sort((a, b) => {
+        if (a[sortBy] && !b[sortBy]) return 1;
+        else if (!a[sortBy] && b[sortBy]) return -1;
+        else return 0;
+      });
+    }
+
+    if (sortBy === "occ" || sortBy === "sqFeet" || sortBy === "price") {
+      currentDisplay.sort((a, b) => {
+        if (parseFloat(a[sortBy]) > parseFloat(b[sortBy])) return 1;
+        else if (parseFloat(a[sortBy]) < parseFloat(b[sortBy])) return -1;
+        else return 0;
+      });
+    }
+  } else {
+    if (
+      sortBy === "address" ||
+      sortBy === "neighbor" ||
+      sortBy === "type" ||
+      sortBy === "availDate"
+    ) {
+      currentDisplay.sort((a, b) => {
+        if (a[sortBy] > b[sortBy]) return -1;
+        else if (a[sortBy] < b[sortBy]) return 1;
+        else return 0;
+      });
+    }
+
+    if (sortBy === "parking" || sortBy === "smoke" || sortBy === "transit") {
+      currentDisplay.sort((a, b) => {
+        if (a[sortBy] && !b[sortBy]) return -1;
+        else if (!a[sortBy] && b[sortBy]) return 1;
+        else return 0;
+      });
+    }
+
+    if (sortBy === "occ" || sortBy === "sqFeet" || sortBy === "price") {
+      currentDisplay.sort((a, b) => {
+        if (parseFloat(a[sortBy]) > parseFloat(b[sortBy])) return -1;
+        else if (parseFloat(a[sortBy]) < parseFloat(b[sortBy])) return 1;
+        else return 0;
+      });
+    }
+  }
+  sessionStorage.setItem("displayWorkspaces", JSON.stringify(currentDisplay));
+  PopulateWorkTable("displayWorkspaces");
+};
+
+/* ShowOwnerInfo - Displays the owner contact info in a popUp
+ *
+ */
+const ShowOwnerInfo = email => {
+  document.querySelector("#popUp").classList.remove("popUpHide");
+  const popUpMsg = document.querySelector("#popMsg");
+  const users = JSON.parse(localStorage.getItem("users"));
+  let owner;
+  users.forEach(user => {
+    if (user.email === email) owner = user;
+  });
+  let info = `Owner: ${owner.fName} ${owner.lName}\n
+              Phone: ${owner.phone}\n
+              Email: ${owner.email}`;
+  console.log(info);
+  popUpMsg.innerText = info;
+};
+
+/* ClosePopup - closes the popUp
+ */
+const ClosePopup = () => {
+  document.querySelector("#popUp").classList.add("popUpHide");
+};
+
+/* FormListener - adds an event listener to the form with selector listening
+ *              for submit, then blocks the page from refreshing and runs a function.
+ *    @Params - selector: the selector of the form to add listener
+ *              func: the name of the function to run * do not include ()
+ */
 const FormListener = (selector, func) => {
   //Only add the event listener if the selector exists on the current page.
   if (document.querySelector(selector))
-    document.querySelector(selector).addEventListener(
-      "submit",
-      event => {
-        event.preventDefault(); //Stops the page from refreshing when submitting the form.
-        func(); //The function to run when the form is submitted.
-      } /*,
-        false*/
-    );
+    document.querySelector(selector).addEventListener("submit", event => {
+      event.preventDefault(); //Stops the page from refreshing when submitting the form.
+      func(); //The function to run when the form is submitted.
+    });
 };
 
 FormListener("#signup", CreateNewUser);
@@ -880,4 +1049,4 @@ FormListener("#addProperty", CreateNewProperty);
 FormListener("#editProperty", EditCurrentProp);
 FormListener("#addWorkspace", CreateNewWorkspace);
 FormListener("#editWorkspace", EditCurrentWork);
-FormListener("#filterForm", Filter);
+FormListener("#filterForm", FilterReady);

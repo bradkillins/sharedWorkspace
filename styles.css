@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -105,6 +106,17 @@ form {
   margin: 0.5em;
 }
 
+input {
+  border: grey 1px solid;
+  background-color: #a8ffd9;
+  box-shadow: none;
+}
+
+input:focus {
+  border: cornflowerblue;
+  background-color: whitesmoke;
+}
+
 table,
 th,
 td {
@@ -114,9 +126,51 @@ td {
 
 th,
 td {
-  padding: 5px 8px;
+  padding: 5px;
 }
 
 .userNameDisplay {
   margin: auto 1em;
+}
+
+.popUp {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  color: white;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+}
+.popUp div {
+  margin: auto 0;
+}
+
+.popClose {
+  position: fixed;
+  top: 25vh;
+  right: 20vw;
+  height: 40px;
+  width: 40px;
+  background-color: white;
+  color: #000000;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 25%;
+}
+.popClose div {
+  margin: 6px 0;
+}
+.popClose:hover {
+  background-color: lightgrey;
+  cursor: pointer;
+}
+#popMsg {
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 1em;
+  border-radius: 10px;
+}
+.popUpHide {
+  display: none;
 }
