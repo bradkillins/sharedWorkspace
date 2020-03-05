@@ -947,6 +947,7 @@ const Sort = (sortBy, order) => {
       sortBy === "address" ||
       sortBy === "neighbor" ||
       sortBy === "type" ||
+      sortBy === "term" ||
       sortBy === "availDate"
     ) {
       currentDisplay.sort((a, b) => {
@@ -976,6 +977,7 @@ const Sort = (sortBy, order) => {
       sortBy === "address" ||
       sortBy === "neighbor" ||
       sortBy === "type" ||
+      sortBy === "term" ||
       sortBy === "availDate"
     ) {
       currentDisplay.sort((a, b) => {
