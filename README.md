@@ -1,6 +1,6 @@
 # sharedWorkspace
 
-My first attempt at creating a web app. Built mainly with basic JavaScript. Uses localStorage as data storage.
+**My first attempt at creating a web app. Built mainly with basic JavaScript. Uses localStorage as data storage.**
 
 A web-app that lets work-space renters connect with work-space owners.
 by Bradley Killins
